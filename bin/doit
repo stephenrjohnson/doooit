@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'bundler/setup'
+require_relative '../lib/settings'
+require_relative '../lib/doit'
+require_relative '../lib/client'
+
+Settings.load
+Client = Doit::Client.instance
+Client.connect(Settings.doit.apikey,Settings.doit.secret)
+Client.login(Settings.doit.username,Settings.doit.password)
+Doit::Doit.start()
