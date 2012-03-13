@@ -1,6 +1,7 @@
 require_relative 'settings'
 require 'boson/runner'
 require_relative 'client'
+require_relative 'task'
 
 module Doit
   class Doit < Boson::Runner
@@ -8,7 +9,7 @@ module Doit
   	def add (*text)
   		text = text.join(" ")
       task = Client.connection.tasks.create(:title =>text)
-      puts "Created ID #{task['task']['id_task']}"
+      Task.print(task['task'])
   	end
 
   	desc 'DEST "TEXT TO ADD"'
@@ -23,29 +24,65 @@ module Doit
 
   	desc 'ITEM#'
   	def del (item)
-    	puts "MOOOO"
+      task = Client.connection.tasks.view(:id_task =>item)
+      if task.has_key?('error')
+        puts task['error']['message']
+        exit 1
+      else
+    	  responce = Client.connection.tasks.delete(:id_task =>item)
+        if responce.has_key?('error')
+          puts responce['error']['message']
+          exit 1
+        else
+          puts "Deleted"
+          Task.print(task['task'])
+        end
+      end
   	end
 
   	desc 'ITEM#'
   	def do (item)
-    	puts "MOOOO"
-  	end
-
-  	desc ''
-  	def list
-      Client.connection.tasks.show_list['tasks'].each do | task, id |
-        Client.printtask(task['task'])
+    	responce = Client.connection.tasks.set_status(:id_task =>item,:status=>2)
+      if responce.has_key?('error')
+        puts responce['error']['message']
+        exit 1
+      else
+        puts "Marked Completed"
+        Task.print(responce['task'])
       end
   	end
 
-  	desc ''
-  	def listall
-    	puts "MOOOO"
+    desc 'ITEM#'
+    def undo (item)
+      responce = Client.connection.tasks.set_status(:id_task =>item,:status=>1)
+      if responce.has_key?('error')
+        puts responce['error']['message']
+        exit 1
+      else
+        puts "Marked uncompleted"
+        Task.print(responce['task'])
+      end
+    end
+
+  	desc 'List all uncompleted'
+  	def list
+     Client.connection.tasks.my_tasks['tasks'].each do | task, id |
+        Task.print(task['task'])
+      end
   	end
 
-  	desc ''
+  	desc 'List all'
+  	def listall
+    	Client.connection.tasks.show_list['tasks'].each do | task, id |
+        Task.print(task['task'])
+      end
+  	end
+
+  	desc 'List all completed'
   	def listcon
-    	puts "MOOOO"
+    	Client.connection.tasks.archived['tasks'].each do | task, id |
+        Task.print(task['task'])
+      end
   	end
 
   	desc 'replace ITEM# "UPDATED TODO"'
@@ -61,12 +98,14 @@ module Doit
           responce = Client.connection.tasks.set_star(:id_task=>item,:star=>star)
           if responce.has_key?('error')
             puts responce['error']['message']
+            exit 1
           else
             puts "Update #{item} to priority #{star}"
-            Client.printtask(responce['task'])
+            Task.print(responce['task'])
           end
         else
           puts "Invalid input"
+          exit 1
         end
     end
   end

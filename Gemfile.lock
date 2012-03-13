@@ -1,15 +1,15 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    boson (1.0.1)
+    boson (1.1.1)
     colorize (0.5.8)
     httparty (0.8.1)
       multi_json
       multi_xml
     json (1.6.5)
     multi_json (1.1.0)
-    multi_xml (0.4.1)
-    producteev (1.1.1)
+    multi_xml (0.4.2)
+    producteev (1.1.3)
       httparty
       json
     settingslogic (2.0.8)
