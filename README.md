@@ -9,8 +9,10 @@ Config File
 Simple create a file ~/.doit with the following info
 
 
-doit:
-    apikey: ""
-    secret: ""
-    username: ""
-    password: ""
+    doit:
+        apikey: ""
+        secret: ""
+        username: ""
+        password: ""
+
+And it should work 
