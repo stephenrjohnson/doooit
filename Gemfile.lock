@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    boson (1.1.1)
+    boson (1.2.0)
     colorize (0.5.8)
     httparty (0.8.1)
       multi_json

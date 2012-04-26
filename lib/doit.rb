@@ -5,12 +5,19 @@ require_relative 'task'
 
 module Doit
   class Doit < Boson::Runner
+
 	  desc 'THING I NEED TO DO +project @context'
   	def add (*text)
   		text = text.join(" ")
       task = Client.connection.tasks.create(:title =>text)
       Task.print(task['task'])
   	end
+
+    desc 'Alias to add'
+    def a (*text)
+      self.add(text)
+    end
+
 
   	desc 'DEST "TEXT TO ADD"'
   	def prepend (item,text)
@@ -31,7 +38,7 @@ module Doit
       else
     	  responce = Client.connection.tasks.delete(:id_task =>item)
         if responce.has_key?('error')
-          puts responce['error']['message']
+          STDERR.puts responce['error']['message']
           exit 1
         else
           puts "Deleted"
@@ -52,11 +59,16 @@ module Doit
       end
   	end
 
+    desc 'Alias to do'
+    def d (item)
+      self.do(item)
+    end
+
     desc 'ITEM#'
     def undo (item)
       responce = Client.connection.tasks.set_status(:id_task =>item,:status=>1)
       if responce.has_key?('error')
-        puts responce['error']['message']
+        STDERR.puts responce['error']['message']
         exit 1
       else
         puts "Marked uncompleted"
@@ -64,26 +76,31 @@ module Doit
       end
     end
 
+
+    desc 'Alias to undo'
+    def ud (item)
+      self.undo(item)
+    end
+
   	desc 'List all uncompleted'
   	def list
-     Client.connection.tasks.my_tasks['tasks'].each do | task, id |
-        Task.print(task['task'])
-      end
+     Task.printtasks(Client.connection.tasks.my_tasks['tasks'],true)
   	end
 
-  	desc 'List all'
-  	def listall
-    	Client.connection.tasks.show_list['tasks'].each do | task, id |
-        Task.print(task['task'])
-      end
-  	end
+    desc 'Alias to list'
+    def l 
+      self.list
+    end
 
   	desc 'List all completed'
   	def listcon
-    	Client.connection.tasks.archived['tasks'].each do | task, id |
-        Task.print(task['task'])
-      end
+    	Task.printtasks(Client.connection.tasks.archived['tasks'])
   	end
+
+    desc 'Alias to listcon'
+    def lc
+      self.listcon
+    end
 
   	desc 'replace ITEM# "UPDATED TODO"'
   	def replace(item,test)
@@ -97,7 +114,7 @@ module Doit
         if star > 0 && star < 6 && item > 0
           responce = Client.connection.tasks.set_star(:id_task=>item,:star=>star)
           if responce.has_key?('error')
-            puts responce['error']['message']
+            STDERR.puts responce['error']['message']
             exit 1
           else
             puts "Update #{item} to priority #{star}"
@@ -108,5 +125,11 @@ module Doit
           exit 1
         end
     end
+
+    desc 'Alias to Priority'
+    def p(item,star)
+      self.priority(item,star)
+    end
+
   end
 end

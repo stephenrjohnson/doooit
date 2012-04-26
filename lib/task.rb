@@ -2,23 +2,30 @@ require_relative 'settings.rb'
 require 'colorize'
 
 module Doit
-  class Task
+	class Task
+	  	def self.printtask(task, sorted = false)
+		  	case task['star']
+		  		when "1"
+		  			task['colour'] = :blue
+		  		when "2"
+		  			task['colour'] = :green
+		  		when "3"
+		  			task['colour'] = :light_yellow
+		  		when "4"
+		  			task['colour'] = :yellow
+		  		when "5"
+		  			task['colour'] = :red
+		  	end
+	  		puts "#{task['id_task'].strip} (#{task['star'].strip}) #{task['title'].strip}".colorize(task['colour'])
+	  	end
 
-	  def self.print(task)
-	  	case task['star']
-	  		when "1"
-	  			colour = :blue
-	  		when "2"
-	  			colour = :green
-	  		when "3"
-	  			colour = :light_yellow
-	  		when "4"
-	  			colour = :yellow
-	  		when "5"
-	  			colour = :red
+	  	def self.printtasks(tasks,sorted = false)
+	  		if sorted
+	  			tasks.sort!{|a,b| b['task']['star'].to_i <=> a['task']['star'].to_i}
 	  		end
-	  		puts "#{task['id_task']} #{task['star']}  #{task['title']}".colorize(colour)
-	  end
-	 
-  end
+	  		tasks.each do | task, id |
+        		self.printtask(task['task'])
+      		end
+	  	end
+  	end
 end

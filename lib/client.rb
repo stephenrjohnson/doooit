@@ -26,5 +26,6 @@ module Doit
 	  end
 
 	  private_class_method :new
-  end
+   end
+
 end
