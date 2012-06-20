@@ -43,14 +43,22 @@ module Doit
   	end
 
   	desc 'TASKID'
-  	def do (taskid)
-    	responce = Task.set_status(:id_task =>taskid,:status=>2)
-      puts "Marked Completed"
-      Task.print(responce['task'])
+  	def do (*taskid)
+      if taskid.kind_of?(Array)
+        taskid.each do |id|
+          responce = Task.set_status(:id_task =>id,:status=>2)
+          puts "Marked Completed"
+          Task.print(responce['task'])
+        end
+      else
+      	responce = Task.set_status(:id_task =>taskid,:status=>2)
+        puts "Marked Completed"
+        Task.print(responce['task'])
+      end
   	end
 
     desc 'Alias to do'
-    def d (taskid)
+    def d (*taskid)
       self.do(taskid)
     end
 
@@ -60,7 +68,6 @@ module Doit
       puts "Marked uncompleted"
       Task.print(responce['task'])
     end
-
 
     desc 'Alias to undo'
     def ud (taskid)
