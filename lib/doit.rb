@@ -2,6 +2,7 @@ require_relative 'settings'
 require 'boson/runner'
 require_relative 'client'
 require_relative 'task'
+require_relative 'label'
 
 module Doit
   class Doit < Boson::Runner
@@ -9,7 +10,7 @@ module Doit
 	  desc 'THING I NEED TO DO +project @context'
   	def add (*text)
   		text = text.join(" ")
-      task = Client.connection.tasks.create(:title =>text)
+      task = Task.create(:title =>text, :id_label => Label.labelids(text))
       Task.print(task['task'])
   	end
 
