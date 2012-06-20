@@ -76,7 +76,10 @@ module Doit
 
   	desc 'List all uncompleted'
   	def list
-     Task.printtasks(Task.my_tasks['tasks'],true)
+     tasks = Task.my_tasks['tasks']
+     Task.printtasks(tasks,true)
+     print "---\n"
+     print "Total : #{tasks.count}\n"
   	end
 
     desc 'Alias to list'
