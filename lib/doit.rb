@@ -39,22 +39,16 @@ module Doit
       task = Task.view(:id_task =>taskid)
     	responce = Task.delete(:id_task =>taskid)
       puts "Deleted"
-      Task.print(responce['task'])
+      Task.print(task['task'])
   	end
 
   	desc 'TASKID'
   	def do (*taskid)
-      if taskid.kind_of?(Array)
-        taskid.each do |id|
-          responce = Task.set_status(:id_task =>id,:status=>2)
+        taskid[0].each do |id|
+          responce = Task.set_status(:id_task =>id.to_s.to_i,:status=>2)
           puts "Marked Completed"
           Task.print(responce['task'])
         end
-      else
-      	responce = Task.set_status(:id_task =>taskid,:status=>2)
-        puts "Marked Completed"
-        Task.print(responce['task'])
-      end
   	end
 
     desc 'Alias to do'
@@ -64,9 +58,11 @@ module Doit
 
     desc 'TASKID'
     def undo (taskid)
-      responce = Task.set_status(:id_task =>taskid,:status=>1)
-      puts "Marked uncompleted"
-      Task.print(responce['task'])
+     taskid[0].each do |id|
+        responce = Task.set_status(:id_task =>taskid,:status=>1)
+        puts "Marked uncompleted"
+        Task.print(responce['task'])
+      end
     end
 
     desc 'Alias to undo'
