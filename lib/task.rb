@@ -3,7 +3,7 @@ require 'colorize'
 
 module Doit
 	class Task
-	  	def self.printtask(task, sorted = false)
+	  	def self.print(task, sorted = false)
 		  	case task['star']
 		  		when "1"
 		  			task['colour'] = :blue
@@ -24,8 +24,19 @@ module Doit
 	  			tasks.sort!{|a,b| b['task']['star'].to_i <=> a['task']['star'].to_i}
 	  		end
 	  		tasks.each do | task, id |
-        		self.printtask(task['task'])
+        		self.print(task['task'])
       		end
+	  	end
+
+	  	def self.method_missing(m, *args, &block)
+	  		connection = Client.connection.tasks
+	  		responce = connection.send m, *args, &block
+	  		if responce.has_key?('error')
+          		STDERR.puts responce['error']['message']
+         		exit 1
+        	else
+        		return responce
+        	end
 	  	end
   	end
 end
