@@ -3,6 +3,7 @@ require 'boson/runner'
 require_relative 'client'
 require_relative 'task'
 require_relative 'label'
+require_relative 'dashboard'
 
 module Doit
   class Doit < Boson::Runner
@@ -13,11 +14,6 @@ module Doit
       task = Task.create(:title =>text, :id_label => Label.labelids(text))
       Task.print(task['task'])
   	end
-
-    desc 'Alias to add'
-    def a (*text)
-      self.add(text)
-    end
 
   	desc 'TASKID "TEXT TO ADD"'
   	def prepend (taskid,text)
