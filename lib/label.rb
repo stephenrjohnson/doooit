@@ -1,5 +1,3 @@
-require_relative 'settings.rb'
-
 module Doit
 	class Label
 		##create label id if not present and returns ids 

@@ -1,6 +1,4 @@
-require_relative 'settings.rb'
 require 'colorize'
-
 module Doit
 	class Task
 	  	def self.print(task, sorted = false)

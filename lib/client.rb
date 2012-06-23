@@ -1,4 +1,3 @@
-require_relative 'settings.rb'
 require 'producteev'
 
 module Doit
