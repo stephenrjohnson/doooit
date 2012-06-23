@@ -112,9 +112,9 @@ module Doit
         end
     end
 
-    desc 'Alias to Priority'
-    def p(taskid,star)
-      self.priority(taskid,star)
+    desc 'List Dashboards'
+    def listdashboards
+      Dashboard.printdashboards
     end
 
   end
