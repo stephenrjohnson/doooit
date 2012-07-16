@@ -15,4 +15,7 @@ Simple create a file ~/.doit with the following info
         username: ""
         password: ""
 
+    optional
+        dashboardid: ""
+
 And it should work 

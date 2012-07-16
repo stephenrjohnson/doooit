@@ -3,7 +3,7 @@ module Doit
     @@dashboard = nil
     ##create label id if not present and returns ids 
     def self.dashboards
-      ##Retunr dashboards
+      ##Return dashboards
       dashboard = Client.connection.dashboards.show_list
       return dashboard['dashboards']
     end
@@ -18,5 +18,12 @@ module Doit
       puts "#{dashboard['dashboard']['id_dashboard']} #{dashboard['dashboard']['title']}"
     end
     
+    def self.currentdashboard
+      begin
+        return Settings.doit.dashboardid
+      rescue
+        return nil
+      end
+    end
   end
 end

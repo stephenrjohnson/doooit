@@ -11,7 +11,7 @@ module Doit
 	  desc 'THING I NEED TO DO +project @context'
   	def add (*text)
   		text = text.join(" ")
-      task = Task.create(:title =>text, :id_label => Label.labelids(text))
+      task = Task.create(:title =>text, :id_label => Label.labelids(text), :id_dashboard => Dashboard.currentdashboard)
       Task.print(task['task'])
   	end
 
@@ -69,7 +69,7 @@ module Doit
 
   	desc 'List all uncompleted'
   	def list
-     tasks = Task.my_tasks['tasks']
+     tasks = Task.my_tasks(:id_dashboard => Dashboard.currentdashboard)['tasks']
      Task.printtasks(tasks,true)
      print "---\n"
      print "Total : #{tasks.count}\n"
@@ -82,7 +82,7 @@ module Doit
 
   	desc 'List all completed'
   	def listcon
-    	Task.printtasks(Task.archived['tasks'])
+    	Task.printtasks(Task.archived(:id_dashboard => Dashboard.currentdashboard)['tasks'])
   	end
 
     desc 'Alias to listcon'
@@ -115,6 +115,11 @@ module Doit
     desc 'List Dashboards'
     def listdashboards
       Dashboard.printdashboards
+    end
+
+    desc 'Current Dashboard'
+    def dashboard
+      print "Current Dashboard ID = #{Dashboard.currentdashboard} \n"
     end
 
   end
